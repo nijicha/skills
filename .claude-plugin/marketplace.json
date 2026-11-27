@@ -1,0 +1,13 @@
+{
+  "name": "nijicha-skills",
+  "owner": { "name": "nijicha" },
+  "description": "Claude Code plugins by nijicha.",
+  "plugins": [
+    {
+      "name": "walkie",
+      "description": "Walkies: narrated videos of a code change, made by an agent. Needs the walkie engine.",
+      "source": "./plugins/walkie",
+      "category": "development"
+    }
+  ]
+}

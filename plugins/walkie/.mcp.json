@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "walkie": {
+      "command": "/bin/sh",
+      "args": ["-c", "PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\" exec walkie mcp"]
+    }
+  }
+}

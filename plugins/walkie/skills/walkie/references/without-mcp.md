@@ -1,0 +1,53 @@
+# Without MCP: setup and shell commands
+
+## Setup
+
+Once per machine (needs mise, pnpm and ffmpeg):
+
+```bash
+walkie setup
+```
+
+It installs the engine's Node packages and its own Playwright Chromium, builds the engine's tools into `$E/bin/wt` (Rust, from mise), and downloads the Thai voice model and dictionaries to `~/.cache/walkie/tts`. The engine records with its own Playwright and Chromium, whatever the repo has.
+
+## Steps by hand
+
+Run from the repo root with `S=$E/scripts`, `WT=$E/bin/wt` and `W` set to the profile's `work_dir` (`tmp/demo` unless the profile says otherwise; it must be gitignored). Wrap each heavy step in the queue: `node $S/queue.ts <label> -- <command>`.
+
+1. Pick the profile; it prints which and why:
+
+   ```bash
+   $WT profile $W/<name>        # DEMO_PROFILE=<profile> to choose
+   ```
+
+2. Write `$W/<name>/narration.tsv`, one line per clip (`n0<TAB>text`, `n0` for the intro), and voice it:
+
+   ```bash
+   $WT tts $W/<name> < $W/<name>/narration.tsv
+   ```
+
+3. Copy the template that `wt profile` printed to `$W/<name>/demo.spec.ts` and write the scenes.
+
+4. Start the app as `NOTES.md` says, then record:
+
+   ```bash
+   DEMO_DIR=$W/<name> $E/node_modules/.bin/playwright test -c $S/demo.config.ts
+   ```
+
+5. Build from the layers and check:
+
+   ```bash
+   D=$W/<name>; R=$(command ls -d $D/results/*/ | head -1)
+   node --no-warnings $S/build.ts $D $R/video.webm
+   $WT frames $D/walkie.mp4 $D $D/contact.png
+   ```
+
+   Read `contact.png`. A `FLASH` comes from a cut between dark and light in one frame: fade it instead.
+
+## Tests
+
+```bash
+cd $E && bin/walkie test   # wt's tests, schemas, smoke recording
+cd $E && pnpm typecheck     # the TypeScript
+cd $E && pnpm test:mcp      # every MCP tool, end to end
+```
