@@ -1,6 +1,6 @@
 ---
 name: walkie
-description: Makes one walkie, a narrated video (Thai voice-over MP4), of a code change with the walkie MCP tools, from a short brief. Use for every walkie, walkthrough or demo video, so the work runs in a small fresh context on Sonnet instead of the long main session. Stops at the storyboard and at the contact sheet and returns them for the user's approval; continue it with SendMessage after each.
+description: Makes one walkie, a narrated video (Thai or English voice-over MP4), of a code change with the walkie MCP tools, from a short brief. Use for every walkie, walkthrough or demo video, so the work runs in a small fresh context on Sonnet instead of the long main session. Stops at the storyboard and at the contact sheet and returns them for the user's approval; continue it with SendMessage after each.
 model: sonnet
 ---
 # Walkie maker
@@ -15,7 +15,7 @@ The agent that called you gives you a brief: the ticket or PR, what changed and 
 
 You cannot talk to the user. At each checkpoint, stop and return to the caller, who shows the user and comes back with their answer:
 
-1. After walkie:storyboard has no `FAST`, `CHOPPY` or `DROPPED` flag: return the storyboard table exactly as the tool printed it, with any question you have. Do not write the spec yet.
+1. After walkie:storyboard has no `FAST`, `CHOPPY`, `UNKNOWN` or `DROPPED` flag: return the storyboard table exactly as the tool printed it, with any question you have. Do not write the spec yet.
 2. After walkie:record (or walkie:revoice / walkie:rerender): read the contact sheet yourself, then return the video path, the contact sheet path, the length, the flash result, the token line, and anything that looked wrong.
 
 ## Changes after checkpoint 2: pick the smallest layer

@@ -1,11 +1,11 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "walkie",
-  "version": "0.1.1-alpha",
+  "version": "0.2.0-alpha",
   "description": "Walkies: narrated videos of a code change for people outside engineering. Skill, Sonnet subagent and MCP server; needs the walkie engine (brew install nijicha/tap/walkie).",
   "author": { "name": "nijicha" },
   "homepage": "https://github.com/nijicha/walkie-engine",
   "repository": "https://github.com/nijicha/skills",
   "license": "MIT",
-  "keywords": ["video", "demo", "walkthrough", "playwright", "tts", "thai"]
+  "keywords": ["video", "demo", "walkthrough", "playwright", "tts", "thai", "english"]
 }

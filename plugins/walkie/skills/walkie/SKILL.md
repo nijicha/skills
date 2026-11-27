@@ -1,6 +1,6 @@
 ---
 name: walkie
-description: Makes walkies, narrated videos of a code change. Records the app with Playwright (or a Flutter app on an iOS Simulator or Android emulator), adds a Thai voice-over, numbered captions, highlights and cards in a per-team look, and builds an MP4 to attach to a PR. Changes the narration, the text or the look of a finished video without recording again. Use when the user asks for a walkie, a walkthrough or demo video, a narrated screen recording, or a video for a PR or ticket.
+description: Makes walkies, narrated videos of a code change. Records the app with Playwright (or a Flutter app on an iOS Simulator or Android emulator), adds a Thai or English voice-over, numbered captions, highlights and cards in a per-team look, and builds an MP4 to attach to a PR. Changes the narration, the text or the look of a finished video without recording again. Use when the user asks for a walkie, a walkthrough or demo video, a narrated screen recording, or a video for a PR or ticket.
 allowed-tools: Bash(walkie *)
 ---
 
@@ -21,7 +21,7 @@ walkie setup
 
 Then restart Claude Code. Do not try to install it yourself.
 
-This skill needs engine 0.1.1-alpha or newer: always pass `min_engine: "0.1.1-alpha"` to walkie:start. If start refuses because the engine is older (or rejects `min_engine` as unknown, which an engine before 0.1.1-alpha does), stop and tell the user to run `brew upgrade walkie` and restart Claude Code.
+This skill needs engine 0.2.0-alpha or newer: always pass `min_engine: "0.2.0-alpha"` to walkie:start. If start refuses because the engine is older (or rejects `min_engine` as unknown, which an engine before 0.1.1-alpha does), stop and tell the user to run `brew upgrade walkie` and restart Claude Code.
 
 ## Run it in a fresh context
 
@@ -37,9 +37,9 @@ Copy this checklist and tick it off:
 
 ```
 Walkie progress:
-- [ ] 1. walkie:start (repo, name, min_engine: "0.1.1-alpha") and read the profile's NOTES.md it returns
+- [ ] 1. walkie:start (repo, name, min_engine: "0.2.0-alpha"); note the Voice line and read the profile's NOTES.md it returns
 - [ ] 2. Write the storyboard: one scene per step, intro first, summary last
-- [ ] 3. walkie:storyboard until no line is flagged FAST, CHOPPY or DROPPED
+- [ ] 3. walkie:storyboard until no line is flagged FAST, CHOPPY, UNKNOWN or DROPPED
 - [ ] 4. CHECKPOINT 1: show the storyboard table, wait for approval
 - [ ] 5. Write demo.spec.ts (Flutter: demo_test.dart) from the template, with an expect in every scene
 - [ ] 6. Start the app as NOTES.md says (Flutter: a simulator or emulator instead)
@@ -48,9 +48,9 @@ Walkie progress:
 - [ ] 9. Hand over: MP4 link, length, scene list, bugs found; stop the servers you started
 ```
 
-**Step 2.** Ask only what the change and the code do not answer: the audience, and which PR or ticket. Each row: action, element to highlight, caption (spelled as the UI shows it), narration (Thai, written for the ear, see [pronunciation](references/pronunciation.md)). When the change is a guard, show the error path before the fix.
+**Step 2.** Ask only what the change and the code do not answer: the audience, and which PR or ticket. Each row: action, element to highlight, caption (spelled as the UI shows it), narration (in the language walkie:start's `Voice:` line names, Thai or English, written for the ear, see [pronunciation](references/pronunciation.md)). When the change is a guard, show the error path before the fix.
 
-**Step 3.** The tool returns each line's length, pace and phonemes. Fix only the flagged lines: add or remove spaces, respell, or add a lexicon entry (walkie:lexicon, test it with walkie:voice_preview). Call it again.
+**Step 3.** The tool returns each line's length, pace and phonemes. Fix only the flagged lines: Thai, add or remove spaces; English, shorten the line; respell, or add a lexicon entry (walkie:lexicon, test it with walkie:voice_preview). Call it again.
 
 **Step 5.** Follow the profile's NOTES.md and the [kit reference](references/kit.md); for a Flutter app (walkie:start says `Runner: flutter`), the [Flutter reference](references/flutter.md) instead. Import only from `./kit`. The `expect` in each scene makes a broken feature fail the recording instead of producing a wrong video: when it fails, the change may have a real bug. Fix the code, not the walkie, and tell the user.
 
@@ -78,6 +78,6 @@ walkie:pr_text (PR description Markdown, copied to the clipboard; the MP4 is dra
 - [Profiles](references/profiles.md): where a team's look, voice and repo notes live; making a new profile ([setup interview](references/setup-interview.md))
 - [Kit](references/kit.md): the `Demo` API a spec uses, and how the video is framed
 - [Flutter](references/flutter.md): Flutter apps on an iOS Simulator or Android emulator: the Dart kit, zoom, recording
-- [Pronunciation](references/pronunciation.md): writing Thai narration for the voice
+- [Pronunciation](references/pronunciation.md): writing Thai or English narration for the voice
 - [Layers](references/layers.md): page, overlay, text and voice; the library; what an app may rely on
 - [Without MCP](references/without-mcp.md): setup, and every step as a shell command
