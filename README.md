@@ -2,6 +2,8 @@
 
 Claude Code plugins by nijicha, in one marketplace.
 
+Docs: [nijicha.github.io/skills](https://nijicha.github.io/skills)
+
 ```
 /plugin install walkie --marketplace nijicha/skills
 ```

@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Claude Code plugins by nijicha, in one marketplace.">
+<title>nijicha skills</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: docs shell. Sticky top bar, left nav, one reading column, right "On this page". Paper, black ink, hairlines, one orange for marks only. */
+  :root {
+    --bg: #ebebe8;
+    --panel: #f6f6f3;
+    --ink: #111111;
+    --muted: #55554f;
+    --rule: rgba(17,17,17,0.14);
+    --rule-strong: rgba(17,17,17,0.28);
+    --accent: #ff4f00;
+    --accent-tint: rgba(255,79,0,0.10);
+    --code-bg: #f6f6f3;
+    --node: #ffffff;
+    --store: rgba(17,17,17,0.05);
+    --zone: rgba(17,17,17,0.02);
+    --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121211; --panel: #1a1a18; --ink: #ededE8; --muted: #a3a39b;
+      --rule: rgba(237,237,232,0.12); --rule-strong: rgba(237,237,232,0.26);
+      --accent: #ff5a14; --accent-tint: rgba(255,90,20,0.14); --code-bg: #1a1a18; --node: #1f1f1d; --store: rgba(237,237,232,0.06); --zone: rgba(237,237,232,0.02);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121211; --panel: #1a1a18; --ink: #ededE8; --muted: #a3a39b;
+    --rule: rgba(237,237,232,0.12); --rule-strong: rgba(237,237,232,0.26);
+    --accent: #ff5a14; --accent-tint: rgba(255,90,20,0.14); --code-bg: #1a1a18; --node: #1f1f1d; --store: rgba(237,237,232,0.06); --zone: rgba(237,237,232,0.02);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  html { scroll-padding-top: 72px; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+  a { color: inherit; }
+  code { font-family: var(--font-mono); font-size: 0.86em; background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 0.08em 0.36em; overflow-wrap: anywhere; }
+
+  /* Top bar */
+  .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--rule); }
+  .top-inner { max-width: 1320px; margin: 0 auto; height: 56px; display: flex; align-items: center; gap: 16px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; text-decoration: none; }
+  .mark { width: 18px; height: 18px; border: 1.5px solid var(--ink); border-radius: 3px; position: relative; }
+  .mark::after { content: ""; position: absolute; left: 3px; top: 3px; width: 9px; height: 9px; background: var(--accent); border-radius: 1px; }
+  .chip { font-family: var(--font-mono); font-size: 12px; color: var(--muted); border: 1px solid var(--rule-strong); border-radius: 4px; padding: 1px 6px; }
+  .top nav { margin-left: auto; display: flex; gap: 18px; font-size: 13px; color: var(--muted); }
+  .top nav a { text-decoration: none; }
+  .top nav a:hover { color: var(--ink); }
+
+  /* Shell */
+  .shell { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 232px minmax(0, 1fr) 208px; gap: 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .side, .toc { position: sticky; top: calc(56px + env(safe-area-inset-top, 0px)); align-self: start; max-height: calc(100vh - 56px); overflow-y: auto; padding-block: 32px; }
+  .side { border-right: 1px solid var(--rule); padding-right: 16px; }
+  .group { margin-bottom: 24px; }
+  .label { font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  .side ul, .toc ul { list-style: none; margin: 0; padding: 0; }
+  .side li a { display: block; padding: 4px 10px; margin-left: -10px; border-radius: 4px; text-decoration: none; font-size: 14px; color: var(--muted); }
+  .side li a:hover { color: var(--ink); background: var(--panel); }
+  .side li a.on { color: var(--ink); font-weight: 600; background: var(--panel); box-shadow: inset 2px 0 0 var(--accent); }
+  .side li a.ext { display: flex; justify-content: space-between; gap: 8px; }
+  .arrow { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .soon { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: var(--muted); border: 1px dashed var(--rule-strong); border-radius: 3px; padding: 0 4px; margin-left: 6px; }
+
+  .toc li a { display: block; padding: 3px 0; font-size: 13px; color: var(--muted); text-decoration: none; }
+  .toc li a:hover { color: var(--ink); }
+  .toc li.sub a { padding-left: 12px; }
+
+  /* Article */
+  main { min-width: 0; padding-block: 32px 96px; max-width: 760px; }
+  .crumbs { font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  h1 { font-size: 2.25rem; font-weight: 700; letter-spacing: -0.035em; line-height: 1.12; margin: 0 0 12px; text-wrap: balance; }
+  .lead { font-size: 1.08rem; color: var(--muted); margin: 0 0 28px; max-width: 62ch; }
+  h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; margin: 56px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); text-wrap: balance; }
+  h3 { font-size: 1.08rem; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 8px; }
+  p { margin: 0 0 14px; max-width: 68ch; }
+  main ul.list { margin: 0 0 14px; padding-left: 20px; }
+  main ul.list li { margin-bottom: 4px; }
+
+  /* Callout */
+  .note { border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--panel); padding: 14px 16px; margin: 0 0 24px; display: grid; grid-template-columns: 16px minmax(0,1fr); gap: 12px; }
+  .note .dot { width: 10px; height: 10px; margin-top: 7px; border: 1.5px solid var(--ink); border-radius: 2px; }
+  .note.key .dot { background: var(--accent); border-color: var(--accent); }
+  .note p { margin: 0; }
+  .note p + p { margin-top: 6px; }
+  .note b { font-weight: 600; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 8px 0 0; padding: 0 0 0 44px; border-left: 1px solid var(--rule-strong); margin-left: 14px; }
+  .step { position: relative; counter-increment: step; padding-bottom: 36px; }
+  .step:last-child { padding-bottom: 4px; }
+  .step::before { content: counter(step); position: absolute; left: -59px; top: -2px; width: 30px; height: 30px; display: grid; place-items: center;
+    font-family: var(--font-mono); font-size: 13px; font-weight: 600; background: var(--bg); border: 1px solid var(--ink); border-radius: 4px; }
+  .step h3 { padding-top: 2px; scroll-margin-top: 72px; }
+
+  /* Code */
+  .code { position: relative; margin: 10px 0 16px; border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--code-bg); }
+  .code .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 14px; border-bottom: 1px solid var(--rule); }
+  .code .where { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .code pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; }
+  .code pre .c { color: var(--muted); }
+  .copy { font-family: var(--font-mono); font-size: 12px; color: var(--muted); background: transparent; border: 1px solid var(--rule-strong); border-radius: 4px; padding: 2px 8px; cursor: pointer; }
+  .copy:hover { color: var(--ink); border-color: var(--ink); }
+  .copy:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Tables */
+  .tbl { overflow-x: auto; margin: 10px 0 20px; border: 1px solid var(--rule-strong); border-radius: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-family: var(--font-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); background: var(--panel); }
+  th, td { padding: 9px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.k { white-space: nowrap; font-weight: 600; }
+  .state { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; border-radius: 3px; padding: 1px 6px; white-space: nowrap; }
+  .state.now { border: 1px solid var(--ink); }
+  .state.next { border: 1px dashed var(--rule-strong); color: var(--muted); }
+
+  /* Checkpoints */
+  .flow { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0; border: 1px solid var(--rule-strong); border-radius: 6px; margin: 10px 0 20px; overflow: hidden; }
+  .flow div { padding: 12px 14px; border-right: 1px solid var(--rule); font-size: 14px; }
+  .flow div:last-child { border-right: 0; }
+  .flow .stop { background: var(--accent-tint); }
+  .flow .label { margin-bottom: 4px; }
+
+  .pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 14px; }
+  .pager a { text-decoration: none; border: 1px solid var(--rule-strong); border-radius: 6px; padding: 10px 14px; }
+  .pager a:hover { border-color: var(--ink); }
+  .pager small { display: block; color: var(--muted); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; }
+
+
+  /* Concept figure: the SVG's own colors are mapped to the page tokens, so it follows the theme. */
+  .figure { margin: 16px 0 8px; border: 1px solid var(--rule-strong); border-radius: 6px; overflow-x: auto; background: var(--bg); }
+  .figure svg { display: block; width: 100%; min-width: 720px; height: auto; }
+  .figure [fill="#ebebe8"] { fill: var(--bg); }
+  .figure [fill="#111111"]:not(.keep) { fill: var(--ink); }
+  .figure [stroke="#111111"] { stroke: var(--ink); }
+  .figure [fill="#55554f"] { fill: var(--muted); }
+  .figure [stroke="#55554f"] { stroke: var(--muted); }
+  .figure [fill="#ffffff"] { fill: var(--node); }
+  .figure [fill="#ff4f00"] { fill: var(--accent); }
+  .figure [stroke="#ff4f00"] { stroke: var(--accent); }
+  .figure [fill="rgba(17,17,17,0.05)"] { fill: var(--store); }
+  .figure [fill="rgba(17,17,17,0.02)"] { fill: var(--zone); }
+  .figure [stroke="rgba(17,17,17,0.16)"] { stroke: var(--rule-strong); }
+  .figure [fill="rgba(85,85,79,0.10)"] { fill: var(--store); }
+  .figure [fill="rgba(255,79,0,0.10)"] { fill: var(--accent-tint); }
+  .figcap { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+  .parts { display: grid; grid-template-columns: 168px minmax(0,1fr); border: 1px solid var(--rule-strong); border-radius: 6px; margin: 10px 0 20px; }
+  .parts dt, .parts dd { margin: 0; padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+  .parts dt { font-weight: 600; }
+  .parts dt small { display: block; font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--muted); }
+  .parts dt:nth-last-of-type(1), .parts dd:last-of-type { border-bottom: 0; }
+  ol.flowlist { margin: 0 0 16px; padding-left: 22px; }
+  ol.flowlist li { margin-bottom: 6px; padding-left: 4px; }
+  ol.flowlist li::marker { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+  @media (max-width: 780px) { .parts { grid-template-columns: minmax(0,1fr); } .parts dt { border-bottom: 0; padding-bottom: 0; } }
+
+  @media (max-width: 1180px) { .shell { grid-template-columns: 220px minmax(0,1fr); } .toc { display: none; } }
+  @media (max-width: 780px) {
+    .shell { grid-template-columns: minmax(0,1fr); gap: 0; }
+    .side { display: none; }
+    .top nav a.hide-sm { display: none; }
+    h1 { font-size: 1.9rem; }
+    .steps { padding-left: 32px; margin-left: 12px; }
+    .step::before { left: -45px; width: 26px; height: 26px; }
+    .flow { grid-template-columns: minmax(0,1fr); }
+    .flow div { border-right: 0; border-bottom: 1px solid var(--rule); }
+    .flow div:last-child { border-bottom: 0; }
+  }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  /* Overview page: one column, no sidebar (one page, nothing to navigate). */
+  .solo { max-width: 760px; margin: 0 auto; padding: 32px 24px 96px; }
+  @media (max-width: 780px) { .solo { padding-inline: 16px; } }
+  .plugin { border: 1px solid var(--rule-strong); border-radius: 8px; background: var(--panel); padding: 20px; margin: 16px 0; }
+  .plugin-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin: 0 0 6px; }
+  .plugin-head h3 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+  .plugin p { margin: 0 0 12px; }
+  .plugin dl { display: grid; grid-template-columns: 96px minmax(0,1fr); gap: 6px 16px; margin: 0 0 14px; font-size: 14px; }
+  .plugin dt { color: var(--muted); }
+  .plugin dd { margin: 0; overflow-wrap: anywhere; }
+  .plugin .links { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; font-weight: 500; }
+  @media (max-width: 480px) { .plugin dl { grid-template-columns: minmax(0,1fr); gap: 2px; } .plugin dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>nijicha/skills</a>
+    <nav>
+      <a href="https://github.com/nijicha/skills">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="solo" id="top">
+  <h1>nijicha/skills</h1>
+  <p class="lead">Claude Code plugins by nijicha, in one marketplace. Each plugin brings its own skills, subagents and MCP servers. Install only the ones you want.</p>
+
+  <h2 id="add">Add the marketplace</h2>
+  <p>Once, in Claude Code. After that, install any plugin below by name.</p>
+  <div class="code">
+    <div class="bar"><span class="where">Claude Code</span><button class="copy" type="button">Copy</button></div>
+    <pre><code>/plugin marketplace add nijicha/skills</code></pre>
+  </div>
+  <p>Get the latest versions with <code>/plugin marketplace update nijicha-skills</code>.</p>
+
+  <h2 id="plugins">Plugins</h2>
+
+  <article class="plugin" id="walkie">
+    <div class="plugin-head"><h3>walkie</h3><span class="chip">0.1.1-alpha</span></div>
+    <p>Narrated videos of a code change, for people outside engineering. Records your app, adds a Thai voice-over, captions and highlights in your team's look, and builds an MP4 to attach to a PR.</p>
+    <dl>
+      <dt>Brings</dt><dd>Skill <code>walkie</code>, a Sonnet subagent, and an MCP server</dd>
+      <dt>Needs</dt><dd>The walkie engine on an Apple Silicon Mac: <code>brew install nijicha/tap/walkie</code></dd>
+      <dt>Install</dt><dd><code>/plugin install walkie@nijicha-skills</code></dd>
+    </dl>
+    <div class="links">
+      <a href="https://nijicha.github.io/walkie-engine/">Setup guide →</a>
+      <a href="https://github.com/nijicha/skills/tree/main/plugins/walkie">Source</a>
+      <a href="https://github.com/nijicha/walkie-engine">Engine</a>
+    </div>
+  </article>
+
+  <h2 id="issues">Issues</h2>
+  <p>A problem with a plugin: open an issue in <a href="https://github.com/nijicha/skills/issues">nijicha/skills</a>. A problem with the walkie engine itself (recording, voice, video): <a href="https://github.com/nijicha/walkie-engine/issues">nijicha/walkie-engine</a>.</p>
+  <p style="color: var(--muted)">MIT licensed.</p>
+</main>
+
+<script>
+  document.querySelectorAll('.code').forEach(function (box) {
+    var btn = box.querySelector('.copy');
+    var pre = box.querySelector('pre');
+    btn.addEventListener('click', function () {
+      var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1400); };
+      var fallback = function () {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        btn.textContent = 'Selected'; setTimeout(function () { btn.textContent = 'Copy'; }, 1400);
+      };
+      try { navigator.clipboard.writeText(pre.innerText).then(done, fallback); } catch (e) { fallback(); }
+    });
+  });
+</script>
+
+</body>
+</html>
