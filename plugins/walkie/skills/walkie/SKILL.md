@@ -21,6 +21,8 @@ walkie setup
 
 Then restart Claude Code. Do not try to install it yourself.
 
+This skill needs engine 0.1.1-alpha or newer: always pass `min_engine: "0.1.1-alpha"` to walkie:start. If start refuses because the engine is older (or rejects `min_engine` as unknown, which an engine before 0.1.1-alpha does), stop and tell the user to run `brew upgrade walkie` and restart Claude Code.
+
 ## Run it in a fresh context
 
 Every API call re-reads the whole conversation, so a walkie made at the end of a long session costs about twice what it costs in a fresh one.
@@ -35,7 +37,7 @@ Copy this checklist and tick it off:
 
 ```
 Walkie progress:
-- [ ] 1. walkie:start (repo, name) and read the profile's NOTES.md it returns
+- [ ] 1. walkie:start (repo, name, min_engine: "0.1.1-alpha") and read the profile's NOTES.md it returns
 - [ ] 2. Write the storyboard: one scene per step, intro first, summary last
 - [ ] 3. walkie:storyboard until no line is flagged FAST, CHOPPY or DROPPED
 - [ ] 4. CHECKPOINT 1: show the storyboard table, wait for approval
