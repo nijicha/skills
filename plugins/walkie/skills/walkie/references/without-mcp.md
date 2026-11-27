@@ -2,13 +2,16 @@
 
 ## Setup
 
-Once per machine (needs mise, pnpm and ffmpeg):
+Once per machine:
 
 ```bash
+brew install nijicha/tap/walkie
 walkie setup
 ```
 
-It installs the engine's Node packages and its own Playwright Chromium, builds the engine's tools into `$E/bin/wt` (Rust, from mise), and downloads the Thai voice model and dictionaries to `~/.cache/walkie/tts`. The engine records with its own Playwright and Chromium, whatever the repo has.
+The Homebrew package already holds the engine's Node packages and its tools (`$E/bin/wt`); it needs only node and ffmpeg, which brew installs. `walkie setup` installs the engine's own Playwright Chromium and downloads the Thai voice model and dictionaries to `~/.cache/walkie/tts`. The engine records with its own Playwright and Chromium, whatever the repo has.
+
+From a source checkout of the engine (for working on it), `walkie setup` also needs mise and pnpm: it installs the Node packages and builds `bin/wt` with Rust from mise.
 
 ## Steps by hand
 
@@ -45,6 +48,8 @@ Run from the repo root with `S=$E/scripts`, `WT=$E/bin/wt` and `W` set to the pr
    Read `contact.png`. A `FLASH` comes from a cut between dark and light in one frame: fade it instead.
 
 ## Tests
+
+From a source checkout of the engine:
 
 ```bash
 cd $E && bin/walkie test   # wt's tests, schemas, smoke recording
