@@ -13,7 +13,7 @@ Ask one question at a time. Give your recommended answer with each question, and
 5. **Fonts.** The brand's sans font, medium and bold, copied to the profile's `fonts/` (woff2). Check its license allows that. Without one, keep Prompt. Monospace and symbols always use CaskaydiaCove Nerd Font.
 6. **Sequence.** Which of `intro`, `chapter`, `summary`, `outro` are on, and step numbers in captions. Recommend intro, summary and step numbers on; chapter off (turn on per video for before/after); outro off.
 7. **Cards.** Light cards (white, primary text) keep brightness steady next to light pages; dark cards suit dark apps. Design two or three card variants with the unslop skill, render each with `walkie preview <profile>`, and let the user pick.
-8. **Voice.** Language and engine (`makham` is Thai only). Speed and pause defaults. Collect product names the TTS gets wrong and add them to the lexicon.
+8. **Voice.** Language: Thai (`th`, MakHam) or English (`en`, Kokoro; pick a speaker, and run `walkie setup en` once). Speed and pause defaults. Collect product names the TTS gets wrong and add them to the lexicon.
 9. **Repo notes.** How to start the app, its URL (`record.base_url`), seed data and log in. These go to `NOTES.md`; login and seeding code goes to `helpers.ts` (Playwright types only, no runtime import).
 
 ## Finish

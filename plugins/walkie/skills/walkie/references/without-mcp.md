@@ -9,7 +9,7 @@ brew install nijicha/tap/walkie
 walkie setup
 ```
 
-The Homebrew package already holds the engine's Node packages and its tools (`$E/bin/wt`); it needs only node and ffmpeg, which brew installs. `walkie setup` installs the engine's own Playwright Chromium and downloads the Thai voice model and dictionaries to `~/.cache/walkie/tts`. The engine records with its own Playwright and Chromium, whatever the repo has.
+The Homebrew package already holds the engine's Node packages and its tools (`$E/bin/wt`); it needs only node and ffmpeg, which brew installs. `walkie setup` installs the engine's own Playwright Chromium and downloads the Thai voice model and dictionaries to `~/.cache/walkie/tts`; `walkie setup en` also downloads the English one (Kokoro, 92 MB). The engine records with its own Playwright and Chromium, whatever the repo has.
 
 From a source checkout of the engine (for working on it), `walkie setup` also needs mise and pnpm: it installs the Node packages and builds `bin/wt` with Rust from mise.
 
